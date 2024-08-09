@@ -1,11 +1,12 @@
 import {Icon, makeStyles, useTheme} from '@rneui/themed';
 import React from 'react';
-import {Alert, Animated, TouchableOpacity} from 'react-native';
+import {Animated, TouchableOpacity} from 'react-native';
 import {CurvedBottomBar} from 'react-native-curved-bottom-bar';
 import Holiday from './holiday';
 import Home from './home';
 import Leaves from './leaves';
 import Profile from './profile';
+import Students from './students';
 
 export default function HomeNavigation() {
   const styles = useStyles();
@@ -23,7 +24,7 @@ export default function HomeNavigation() {
         <Animated.View style={styles.btnCircleDown}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => Alert.alert('Click Action')}>
+            onPress={() => navigate('Students')}>
             <Icon
               name={'people-outline'}
               type="ionicons"
@@ -35,6 +36,11 @@ export default function HomeNavigation() {
       )}
       tabBar={rest => <RenderTabBar {...rest} />}
       screenOptions={{headerShown: false}}>
+      <CurvedBottomBar.Screen
+        name="Students"
+        position="CIRCLE"
+        component={Students}
+      />
       <CurvedBottomBar.Screen name="Home" position="LEFT" component={Home} />
       <CurvedBottomBar.Screen name="Leave" position="LEFT" component={Leaves} />
       <CurvedBottomBar.Screen

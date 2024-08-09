@@ -56,6 +56,17 @@ const theme = createTheme({
         paddingVertical: 12,
       },
     }),
+    SearchBar: (props, th) => ({
+      containerStyle: {
+        borderRadius: 8,
+        backgroundColor: th.colors.background,
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+      },
+      inputContainerStyle: {
+        backgroundColor: th.colors.background,
+      },
+    }),
   },
 });
 

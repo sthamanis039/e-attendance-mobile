@@ -52,7 +52,6 @@ export default function Stats() {
               alignItems: 'center',
               columnGap: 8,
             }}>
-            {console.log(item?.color)}
             <Button
               buttonStyle={{
                 backgroundColor: item.color,
