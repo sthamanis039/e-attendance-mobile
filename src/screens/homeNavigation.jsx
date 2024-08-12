@@ -1,15 +1,35 @@
+import {useNavigation} from '@react-navigation/native';
 import {Icon, makeStyles, useTheme} from '@rneui/themed';
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Animated, TouchableOpacity} from 'react-native';
 import {CurvedBottomBar} from 'react-native-curved-bottom-bar';
-import Holiday from './holiday';
+import useApp from '../hooks/useApp';
 import Home from './home';
-import Leaves from './leaves';
+// import Holiday from './holiday';
+// import Leaves from './leaves';
 import Profile from './profile';
 import Students from './students';
 
 export default function HomeNavigation() {
   const styles = useStyles();
+  const app = useApp();
+  const navigation = useNavigation();
+
+  const getLoggedInUser = useCallback(async () => {
+    let user = app?.user;
+    if (!user) {
+      user = await app?.getUser();
+      app?.setUser(user);
+    }
+    if (!user) {
+      navigation.navigate('Login');
+    }
+  }, [app, navigation]);
+
+  useEffect(() => {
+    getLoggedInUser();
+  }, [getLoggedInUser]);
+
   return (
     <CurvedBottomBar.Navigator
       type="DOWN"
@@ -34,6 +54,7 @@ export default function HomeNavigation() {
           </TouchableOpacity>
         </Animated.View>
       )}
+      // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={rest => <RenderTabBar {...rest} />}
       screenOptions={{headerShown: false}}>
       <CurvedBottomBar.Screen
@@ -42,12 +63,12 @@ export default function HomeNavigation() {
         component={Students}
       />
       <CurvedBottomBar.Screen name="Home" position="LEFT" component={Home} />
-      <CurvedBottomBar.Screen name="Leave" position="LEFT" component={Leaves} />
-      <CurvedBottomBar.Screen
+      {/* <CurvedBottomBar.Screen name="Leave" position="LEFT" component={Leaves} /> */}
+      {/* <CurvedBottomBar.Screen
         name="Holiday"
         position="RIGHT"
         component={Holiday}
-      />
+      /> */}
       <CurvedBottomBar.Screen
         name="Profile"
         position="RIGHT"

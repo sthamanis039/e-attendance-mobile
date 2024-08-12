@@ -1,7 +1,11 @@
 import {Avatar, Icon, Text, makeStyles, useTheme} from '@rneui/themed';
+import {useQuery} from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import {englishToNepaliNumber} from 'nepali-number';
-import React, {useEffect, useRef} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useMemo, useRef} from 'react';
+import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
+import {getMyActivity} from '../../api';
+import useApp from '../../hooks/useApp';
 import {currentYear, days, getCurrentDate} from '../../libs/calendar';
 import Activity from './Activity';
 import Stats from './Stats';
@@ -9,22 +13,71 @@ import Stats from './Stats';
 export default function Home() {
   const styles = useStyles();
   const {theme} = useTheme();
+  const app = useApp();
+  const today = getCurrentDate();
+
+  const user = useMemo(() => {
+    return app?.me || null;
+  }, [app]);
+
+  const {data, isLoading, refetch} = useQuery({
+    queryKey: ['attendance-stats'],
+    queryFn: getMyActivity(`?from=${today}&to=${today}`),
+  });
+
+  const {
+    data: activityData,
+    isLoading: isActivityLoading,
+    refetch: refetchActivity,
+  } = useQuery({
+    queryKey: ['activity'],
+    queryFn: getMyActivity('?limit=10&page=1'),
+  });
+
+  const stats = useMemo(() => {
+    const checkIn = data?.data?.data?.days[0]?.checkin
+      ? dayjs(data.data.data.days[0].checkin).format('HH:mm A')
+      : '';
+    const checkOut = data?.data?.data?.days[0]?.checkout
+      ? dayjs(data.data.data.days[0].checkout).format('HH:mm A')
+      : '';
+    return {
+      checkIn,
+      checkOut,
+    };
+  }, [data]);
+
   return (
     <View style={{flex: 1}}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => {
+              refetch();
+              refetchActivity();
+            }}
+          />
+        }>
         <View style={styles.profileContainer}>
           <Avatar
             size={64}
             rounded
-            title="AA"
+            title={user?.first_name.charAt(0) + user?.last_name.charAt(0) || ''}
             containerStyle={styles.avatarContainer}
           />
           <View style={{flex: 1}}>
-            <Text h4>John Doe</Text>
-            <Text style={styles.h5}>Student</Text>
+            <Text h4>{user?.first_name + ' ' + user?.last_name}</Text>
+            <Text style={styles.h5}>{user?.role}</Text>
           </View>
           <View>
-            <Icon raised name="menu" type="ionicon" />
+            <Icon
+              raised
+              name="account-check-outline"
+              type="material-community"
+              color={theme.colors.success}
+              size={18}
+            />
           </View>
         </View>
         <View
@@ -45,10 +98,10 @@ export default function Home() {
               flexWrap: 'wrap',
               gap: 16,
             }}>
-            <Stats />
+            <Stats statsData={stats} />
           </View>
         </View>
-        <Activity />
+        <Activity data={activityData} isLoading={isActivityLoading} />
       </ScrollView>
     </View>
   );
@@ -143,7 +196,8 @@ const useStyles = makeStyles(theme => ({
   h5: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: theme.colors.dark,
+    color: theme.colors.grey3,
+    textTransform: 'capitalize',
   },
   calendarBtn: {
     paddingVertical: 8,

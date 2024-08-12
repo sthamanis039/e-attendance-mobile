@@ -20,7 +20,7 @@ export default function checkAndGrantPermission(permission) {
           Alert.alert(`Permission ${permission} is unavailable`);
           break;
         case RESULTS.DENIED:
-          requestPermission(permission);
+          // requestPermission(permission);
           break;
         case RESULTS.LIMITED:
           Alert.alert(`Permission ${permission} is limited`);

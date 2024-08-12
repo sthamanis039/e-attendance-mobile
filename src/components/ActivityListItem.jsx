@@ -1,29 +1,38 @@
 import {Button, Icon, ListItem, useTheme} from '@rneui/themed';
 import React from 'react';
 
-export default function ActivityListItem({
-  type = 'checkin',
-  date = '2081/04/21',
-  time = '09:00 AM',
-}) {
+export default function ActivityListItem({type, date, time}) {
   const {theme} = useTheme();
   return (
     <ListItem style={{borderRadius: 16}}>
       <Button
         buttonStyle={{
-          backgroundColor: theme.colors.primaryShades[100],
+          backgroundColor:
+            type === 'absent'
+              ? theme.colors.tertiaryShades[100]
+              : theme.colors.primaryShades[100],
           paddingHorizontal: 8,
           paddingVertical: 8,
         }}>
         <Icon
-          name={type === 'checkin' ? 'login' : 'logout'}
+          name={
+            type === 'checkin'
+              ? 'login'
+              : type === 'checkout'
+              ? 'logout'
+              : 'close'
+          }
           type="antdesign"
           size={14}
         />
       </Button>
       <ListItem.Content>
         <ListItem.Title style={{fontWeight: 'bold'}}>
-          {type === 'checkin' ? 'Check In' : 'Check Out'}
+          {type === 'checkin'
+            ? 'Check In'
+            : type === 'checkout'
+            ? 'Check Out'
+            : 'Absent'}
         </ListItem.Title>
         <ListItem.Subtitle>{date}</ListItem.Subtitle>
       </ListItem.Content>
@@ -35,7 +44,7 @@ export default function ActivityListItem({
             fontWeight: 'bold',
             fontSize: 18,
           }}>
-          {time}
+          {time ? time : ''}
         </ListItem.Title>
       </ListItem.Content>
     </ListItem>

@@ -10,6 +10,7 @@ const theme = createTheme({
     secondaryShades: COLORS.secondary,
     tertiaryShades: COLORS.tertiary,
     gray: COLORS.gray,
+    dark: COLORS.dark[500],
     // different for light colors
     background: 'white',
   },
@@ -21,6 +22,7 @@ const theme = createTheme({
     secondaryShades: COLORS.secondary,
     tertiaryShades: COLORS.tertiary,
     gray: COLORS.gray,
+    dark: COLORS.dark[500],
     // different for dark colors
     background: COLORS.dark[500],
   },

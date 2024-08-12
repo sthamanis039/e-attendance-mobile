@@ -3,7 +3,7 @@ import {Icon, Text, useTheme} from '@rneui/themed';
 import React from 'react';
 import {View} from 'react-native';
 
-export default function Header({title}) {
+export default function Header({title, noBack = false}) {
   const {theme} = useTheme();
   const navigation = useNavigation();
   return (
@@ -15,11 +15,13 @@ export default function Header({title}) {
         flexDirection: 'row',
         columnGap: 16,
       }}>
-      <Icon
-        name="arrowleft"
-        type="antdesign"
-        onPress={() => navigation.goBack()}
-      />
+      {!noBack && (
+        <Icon
+          name="arrowleft"
+          type="antdesign"
+          onPress={() => navigation.goBack()}
+        />
+      )}
       <Text
         style={{
           fontSize: 18,

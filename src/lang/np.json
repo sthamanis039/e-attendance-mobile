@@ -1,10 +1,15 @@
 {
-  "welcomeBack": "Welcome Back",
+  "welcomeBack": "Welcome",
   "to": "to",
-  "HRAttendee": "HR Attendee",
+  "HRAttendee": "Ezee हाजिरी",
   "Hello there, login to continue": "Hello there, login to continue",
   "Email Address": "Email Address",
   "Password": "Password",
   "didnthaveaccount": "Didn't have an account?",
-  "register": "Register"
+  "register": "Register",
+  "Student/Parent": "विद्यार्थी/अभिभावक",
+  "Staff": "कर्मचारी",
+  "Phone Number": "फोन नम्बर",
+  "Date of Birth": "जन्ममिति",
+  "Login": "लग इन"
 }

@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {Avatar, Icon, ListItem, SearchBar, useTheme} from '@rneui/themed';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
@@ -7,9 +7,13 @@ import Header from '../../components/Header';
 export default function Students() {
   const {theme} = useTheme();
   const navigation = useNavigation();
+  const route = useRoute();
+
+  console.log('student route', route);
+
   return (
     <View style={{flex: 1}}>
-      <Header title="My Class" />
+      <Header title="My Class" noBack />
       <ScrollView>
         <SearchBar />
         <View style={{padding: 8}}>

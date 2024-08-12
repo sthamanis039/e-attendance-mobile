@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "583280177834",
+    "project_id": "easy-hajiri",
+    "storage_bucket": "easy-hajiri.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583280177834:android:fac9f585e74bcac56496d3",
+        "android_client_info": {
+          "package_name": "com.attendance_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDieN9ve3F0ttTMZ172ejvHSHf8RZX35IA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
