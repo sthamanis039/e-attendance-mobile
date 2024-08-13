@@ -12,23 +12,27 @@ export default function Header({title, noBack = false}) {
         padding: 16,
         backgroundColor: theme.colors.background,
         color: theme.colors.dark,
-        flexDirection: 'row',
-        columnGap: 16,
       }}>
-      {!noBack && (
-        <Icon
-          name="arrowleft"
-          type="antdesign"
-          onPress={() => navigation.goBack()}
-        />
-      )}
-      <Text
+      <View
         style={{
-          fontSize: 18,
-          fontWeight: '700',
+          flexDirection: 'row',
+          columnGap: 16,
         }}>
-        {title}
-      </Text>
+        {!noBack && (
+          <Icon
+            name="arrowleft"
+            type="antdesign"
+            onPress={() => navigation.goBack()}
+          />
+        )}
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: '700',
+          }}>
+          {title}
+        </Text>
+      </View>
     </View>
   );
 }

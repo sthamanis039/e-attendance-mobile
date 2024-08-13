@@ -7,13 +7,21 @@ import useApp from '../hooks/useApp';
 import Home from './home';
 // import Holiday from './holiday';
 // import Leaves from './leaves';
+import {useQuery} from '@tanstack/react-query';
+import {getMe} from '../api';
+import {removeFromStorage} from '../libs/storage';
 import Profile from './profile';
-import Students from './students';
 
 export default function HomeNavigation() {
   const styles = useStyles();
   const app = useApp();
   const navigation = useNavigation();
+
+  const {data, isLoading, error} = useQuery({
+    queryKey: ['me'],
+    queryFn: getMe,
+    staleTime: Infinity,
+  });
 
   const getLoggedInUser = useCallback(async () => {
     let user = app?.user;
@@ -30,6 +38,18 @@ export default function HomeNavigation() {
     getLoggedInUser();
   }, [getLoggedInUser]);
 
+  useEffect(() => {
+    if (error?.response?.status === 401) {
+      removeFromStorage('user');
+      app?.setUser(null);
+      navigation.navigate('Login');
+    }
+    if (!isLoading) {
+      app?.setMe && app.setMe(data?.data?.data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, data]);
+
   return (
     <CurvedBottomBar.Navigator
       type="DOWN"
@@ -44,9 +64,17 @@ export default function HomeNavigation() {
         <Animated.View style={styles.btnCircleDown}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigate('Students')}>
+            onPress={() =>
+              app?.me?.role === 'student'
+                ? navigation.navigate('ActivityLog')
+                : navigation.navigate('Students', {
+                    title: app?.me?.isClassTeacher
+                      ? 'My Students'
+                      : 'All Students',
+                  })
+            }>
             <Icon
-              name={'people-outline'}
+              name={app?.me?.role === 'student' ? 'list' : 'people-outline'}
               type="ionicons"
               color="white"
               size={25}
@@ -57,11 +85,6 @@ export default function HomeNavigation() {
       // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={rest => <RenderTabBar {...rest} />}
       screenOptions={{headerShown: false}}>
-      <CurvedBottomBar.Screen
-        name="Students"
-        position="CIRCLE"
-        component={Students}
-      />
       <CurvedBottomBar.Screen name="Home" position="LEFT" component={Home} />
       {/* <CurvedBottomBar.Screen name="Leave" position="LEFT" component={Leaves} /> */}
       {/* <CurvedBottomBar.Screen

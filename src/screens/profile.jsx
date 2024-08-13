@@ -8,6 +8,8 @@ export default function Profile() {
   const {theme} = useTheme();
   const navigation = useNavigation();
   const app = useApp();
+
+  console.log('me', app?.me);
   return (
     <View style={{flex: 1}}>
       <View
@@ -17,17 +19,28 @@ export default function Profile() {
           alignItems: 'center',
           minHeight: '30%',
           backgroundColor: theme.colors.background,
+          rowGap: 4,
         }}>
         <Avatar
           rounded
           size={100}
           containerStyle={{backgroundColor: theme.colors.primary}}
-          title="AA"
+          title={
+            app?.me?.first_name?.charAt(0) + app?.me?.last_name?.charAt(0) || ''
+          }
         />
         <Text style={{fontWeight: 'bold', marginTop: 8, fontSize: 18}}>
-          John Doe
+          {app?.me?.first_name + ' ' + app?.me?.last_name}
         </Text>
-        <Text>Grade: Five "A"</Text>
+        <Text>Grade: {app?.me?.grade?.name}</Text>
+        <Text
+          style={{
+            fontSize: 15,
+            fontWeight: 'condensedBold',
+            color: theme.colors.secondary,
+          }}>
+          {app?.me?.organization?.name || 'Ideabreed School'}
+        </Text>
       </View>
       <ScrollView contentContainerStyle={{padding: 8}}>
         <ListItem style={{marginBottom: 8}}>

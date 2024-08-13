@@ -4,7 +4,15 @@ import React from 'react';
 export default function ActivityListItem({type, date, time}) {
   const {theme} = useTheme();
   return (
-    <ListItem style={{borderRadius: 16}}>
+    <ListItem
+      style={{
+        borderLeftWidth: 8,
+        borderRightWidth: 8,
+        borderLeftColor:
+          type === 'absent' ? theme.colors.tertiary : theme.colors.primary,
+        borderRightColor: theme.colors.white,
+        borderRadius: 8,
+      }}>
       <Button
         buttonStyle={{
           backgroundColor:
@@ -27,7 +35,7 @@ export default function ActivityListItem({type, date, time}) {
         />
       </Button>
       <ListItem.Content>
-        <ListItem.Title style={{fontWeight: 'bold'}}>
+        <ListItem.Title style={{fontWeight: 'condensedBold'}}>
           {type === 'checkin'
             ? 'Check In'
             : type === 'checkout'

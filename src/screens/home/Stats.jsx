@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {Button, Icon, Text, useTheme} from '@rneui/themed';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Dimensions, TouchableOpacity, View} from 'react-native';
 import COLORS from '../../constants/colors';
 import useApp from '../../hooks/useApp';
 
@@ -26,7 +26,7 @@ const stats = [
     icon: 'check',
     color: COLORS.secondary[300],
     navigate: {to: 'Students', params: {type: 'present'}},
-    allowedRole: '!student',
+    allowedRole: ['*', '!student'],
   },
   {
     key: 'totalAbsent',
@@ -34,7 +34,7 @@ const stats = [
     icon: 'close',
     color: COLORS.tertiary[300],
     navigate: {to: 'Students', params: {type: 'absent'}},
-    allowedRole: '!student',
+    allowedRole: ['*', '!student'],
   },
   {
     key: 'late',
@@ -42,7 +42,7 @@ const stats = [
     icon: 'fastbackward',
     color: COLORS.secondary[100],
     navigate: {to: 'Students', params: {type: 'late'}},
-    allowedRole: '!student',
+    allowedRole: ['*', '!student'],
   },
   {
     key: 'onLeave',
@@ -50,7 +50,7 @@ const stats = [
     icon: 'calendar',
     color: COLORS.tertiary[100],
     navigate: {to: 'Students', params: {type: 'onLeave'}},
-    allowedRole: '!student',
+    allowedRole: ['*', '!student'],
   },
 ];
 
@@ -64,9 +64,9 @@ export default function Stats({statsData = {}}) {
       {stats
         .filter(stat => {
           let roles = [].concat([stat.allowedRole]).flat();
-          if (roles.includes('!' + app?.user?.role)) return false;
+          if (roles.includes('!' + app?.me?.role)) return false;
           if (roles.includes('*')) return true;
-          if (roles.includes(app?.user?.role)) return true;
+          if (roles.includes(app?.me?.role)) return true;
           return false;
         })
         .map((item, index) => (
@@ -76,7 +76,7 @@ export default function Stats({statsData = {}}) {
               padding: 16,
               backgroundColor: theme.colors.background,
               borderRadius: 8,
-              flexBasis: '48%',
+              width: Dimensions.get('window').width / 2 - 24,
             }}
             onPress={() => {
               if (item.navigate) {
@@ -101,7 +101,7 @@ export default function Stats({statsData = {}}) {
             </View>
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 16,
                 paddingVertical: 8,
                 textAlign: 'center',
                 fontWeight: '700',

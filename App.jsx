@@ -10,7 +10,7 @@ import i18n from './src/libs/i18n';
 import {getFromStorage, setToStorage} from './src/libs/storage';
 import Navigations from './src/navigations';
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export default function App() {
   useEffect(() => {

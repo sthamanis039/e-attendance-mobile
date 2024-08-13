@@ -127,6 +127,8 @@ export function AppContextProvider({children}) {
     }
   }
 
+  console.log('APP STATE', state);
+
   return (
     <AppContext.Provider
       value={{...state, setUsers, setUser, getUsers, getUser, setMe, logOut}}>

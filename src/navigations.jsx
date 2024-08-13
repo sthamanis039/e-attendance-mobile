@@ -1,16 +1,17 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useTheme} from '@rneui/themed';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation} from '@tanstack/react-query';
 import React, {useCallback, useEffect} from 'react';
 import {Platform, StatusBar, ToastAndroid, View} from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
-import {getMe, sendDeviceId} from './api';
+import {sendDeviceId} from './api';
 import useApp from './hooks/useApp';
 import Notification from './libs/notification';
 import ActivityLog from './screens/activityLog';
 import HomeNavigation from './screens/homeNavigation';
 import Login from './screens/login';
+import Students from './screens/students';
 
 const Stack = createStackNavigator();
 
@@ -31,12 +32,6 @@ export default function Navigations() {
     },
   });
 
-  const {data, isLoading} = useQuery({
-    queryKey: ['me'],
-    queryFn: getMe,
-    staleTime: Infinity,
-  });
-
   const sendDeviceIdToServer = useCallback(async () => {
     const deviceId = await getUniqueId();
     const platform = Platform.OS;
@@ -51,13 +46,6 @@ export default function Navigations() {
   useEffect(() => {
     sendDeviceIdToServer();
   }, [sendDeviceIdToServer]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      app?.setMe && app.setMe(data?.data?.data);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, data]);
 
   return (
     <>
@@ -81,6 +69,11 @@ export default function Navigations() {
             <Stack.Screen
               name="ActivityLog"
               component={ActivityLog}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Students"
+              component={Students}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

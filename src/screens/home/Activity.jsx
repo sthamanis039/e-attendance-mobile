@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import {Button, makeStyles, Text, useTheme} from '@rneui/themed';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
@@ -7,6 +8,7 @@ import useApp from '../../hooks/useApp';
 export default function Activity({data, isLoading}) {
   const styles = useStyles();
   const {theme} = useTheme();
+  const navigation = useNavigation();
 
   const app = useApp();
 
@@ -45,7 +47,7 @@ export default function Activity({data, isLoading}) {
           paddingBottom: 8,
         }}>
         <Text style={styles.h5}>Your Activity</Text>
-        {!app?.me?.role === 'student' && (
+        {app?.me?.role !== 'student' && (
           <Button
             buttonStyle={{
               backgroundColor: 'transparent',
@@ -54,6 +56,7 @@ export default function Activity({data, isLoading}) {
               color: theme.colors.primary,
             }}
             title="View All"
+            onPress={() => navigation.navigate('ActivityLog')}
           />
         )}
       </View>
@@ -61,7 +64,7 @@ export default function Activity({data, isLoading}) {
         {isLoading ? (
           <ActivityIndicator size="large" color={theme.colors.primary} />
         ) : (
-          dataList.map((_, i) => <ActivityListItem key={i} {..._} />)
+          dataList?.map((_, i) => <ActivityListItem key={i} {..._} />)
         )}
       </View>
     </View>
@@ -70,8 +73,9 @@ export default function Activity({data, isLoading}) {
 
 const useStyles = makeStyles(theme => ({
   h5: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: theme.colors.dark,
+    fontSize: 16,
+    fontWeight: 'condensedBold',
+    color: theme.colors.grey3,
+    textTransform: 'capitalize',
   },
 }));

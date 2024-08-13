@@ -22,7 +22,11 @@ export default function Home() {
 
   const {data, isLoading, refetch} = useQuery({
     queryKey: ['attendance-stats'],
-    queryFn: getMyActivity(`?from=${today}&to=${today}`),
+    queryFn: getMyActivity({
+      from: today,
+      to: today,
+      stats: app?.me?.isClassTeacher,
+    }),
   });
 
   const {
@@ -31,7 +35,10 @@ export default function Home() {
     refetch: refetchActivity,
   } = useQuery({
     queryKey: ['activity'],
-    queryFn: getMyActivity('?limit=10&page=1'),
+    queryFn: getMyActivity({
+      limit: 10,
+      page: 1,
+    }),
   });
 
   const stats = useMemo(() => {
@@ -61,30 +68,38 @@ export default function Home() {
         }>
         <View style={styles.profileContainer}>
           <Avatar
-            size={64}
+            size={50}
             rounded
             title={user?.first_name.charAt(0) + user?.last_name.charAt(0) || ''}
             containerStyle={styles.avatarContainer}
           />
           <View style={{flex: 1}}>
-            <Text h4>{user?.first_name + ' ' + user?.last_name}</Text>
-            <Text style={styles.h5}>{user?.role}</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+              {user?.first_name + ' ' + user?.last_name}
+            </Text>
+            <Text style={styles.h5}>
+              {user?.isClassTeacher ? 'Class Teacher' : user?.role}
+            </Text>
           </View>
           <View>
             <Icon
               raised
-              name="account-check-outline"
+              name={
+                app?.me?.isPresent > 0
+                  ? 'account-check-outline'
+                  : 'account-cancel-outline'
+              }
               type="material-community"
-              color={theme.colors.success}
+              color={
+                app?.me?.isPresent > 0
+                  ? theme.colors.success
+                  : theme.colors.error
+              }
               size={18}
             />
           </View>
         </View>
-        <View
-          style={[
-            styles.padding16,
-            {backgroundColor: theme.colors.background},
-          ]}>
+        <View style={[{backgroundColor: theme.colors.background}]}>
           <CalendarComponent />
         </View>
         <View style={styles.padding16}>
@@ -96,7 +111,7 @@ export default function Home() {
               paddingVertical: 16,
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: 16,
+              gap: 8,
             }}>
             <Stats statsData={stats} />
           </View>
@@ -194,8 +209,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.colors.primary,
   },
   h5: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: 'condensedBold',
     color: theme.colors.grey3,
     textTransform: 'capitalize',
   },

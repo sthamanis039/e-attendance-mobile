@@ -14,7 +14,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator, View} from 'react-native';
-import {login} from '../api';
+import {login, loginStaff} from '../api';
 import useApp from '../hooks/useApp';
 
 export default function Login() {
@@ -30,10 +30,9 @@ export default function Login() {
   const {handleSubmit, setValue, getValues} = useForm();
 
   const {mutate, isPending} = useMutation({
-    mutationKey: ['login'],
+    mutationKey: ['login-student'],
     mutationFn: login,
     onSuccess: response => {
-      console.log('login', response);
       app?.setUsers && app.setUsers(response?.data?.data);
       let loggedInUser = response?.data?.data?.find(user => {
         return (
@@ -46,8 +45,26 @@ export default function Login() {
     },
   });
 
+  const {mutate: mutateStaffLogin, isPending: isStaffLoginPending} =
+    useMutation({
+      mutationKey: ['login-staff'],
+      mutationFn: loginStaff,
+      onSuccess: response => {
+        console.log('login', response);
+        app?.setUsers && app.setUsers([response?.data?.data]);
+        app?.setUser && app.setUser(response?.data?.data);
+        navigation.navigate('HomeNavigation');
+      },
+    });
+
   function onSubmit(data) {
-    mutate(data);
+    console.log('login data', data);
+    if (selectedRole === 0) {
+      mutate(data);
+    }
+    if (selectedRole === 1) {
+      mutateStaffLogin(data);
+    }
   }
 
   const getLoggedInUser = useCallback(async () => {
@@ -131,7 +148,7 @@ function StudentLoginForm({setValue}) {
   );
 }
 
-function StaffLoginForm() {
+function StaffLoginForm({setValue}) {
   const {theme} = useTheme();
   const [visible, setVisible] = React.useState(true);
   const styles = useStyles();
@@ -140,7 +157,10 @@ function StaffLoginForm() {
   return (
     <>
       <View>
-        <Input label={t('Email Address')} />
+        <Input
+          label={t('Email Address/Username')}
+          onChangeText={text => setValue('username', text)}
+        />
       </View>
       <View>
         <Input
@@ -154,6 +174,7 @@ function StaffLoginForm() {
               onPress={() => setVisible(!visible)}
             />
           }
+          onChangeText={text => setValue('password', text)}
         />
         <Text style={[styles.textPrimary, styles.forgotPassword]}>
           Forgot Password?
