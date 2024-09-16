@@ -2,8 +2,8 @@ import axios from 'axios';
 import {getFromStorage} from '../libs/storage';
 import queryGenerator from '../utils/queryGenerator';
 
-// const BASE_URL="https://hajiri.ibis.com.np/api/v1"
-const BASE_URL = 'http://192.168.18.88:8002/api/v1';
+const BASE_URL = 'https://hajiri.ibis.com.np/api/v1';
+// const BASE_URL = 'http://192.168.18.88:8002/api/v1';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

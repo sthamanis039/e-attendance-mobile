@@ -17,13 +17,10 @@ export default function checkAndGrantPermission(permission) {
     check(`android.permission.${permission}`).then(result => {
       switch (result) {
         case RESULTS.UNAVAILABLE:
-          Alert.alert(`Permission ${permission} is unavailable`);
           break;
         case RESULTS.DENIED:
-          // requestPermission(permission);
           break;
         case RESULTS.LIMITED:
-          Alert.alert(`Permission ${permission} is limited`);
           break;
         case RESULTS.GRANTED:
           return;

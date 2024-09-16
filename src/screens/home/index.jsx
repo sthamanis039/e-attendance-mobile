@@ -3,14 +3,20 @@ import {useQuery} from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import {englishToNepaliNumber} from 'nepali-number';
 import React, {useEffect, useMemo, useRef} from 'react';
-import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {getMyActivity} from '../../api';
 import useApp from '../../hooks/useApp';
 import {currentYear, days, getCurrentDate} from '../../libs/calendar';
 import Activity from './Activity';
 import Stats from './Stats';
 
-export default function Home() {
+export default function Home({refetchMe}) {
   const styles = useStyles();
   const {theme} = useTheme();
   const app = useApp();
@@ -48,9 +54,13 @@ export default function Home() {
     const checkOut = data?.data?.data?.days[0]?.checkout
       ? dayjs(data.data.data.days[0].checkout).format('HH:mm A')
       : '';
+    const totalPresent = data?.data?.data?.stats?.present;
+    const totalAbsent = data?.data?.data?.stats?.total - totalPresent;
     return {
       checkIn,
       checkOut,
+      totalPresent,
+      totalAbsent,
     };
   }, [data]);
 
@@ -63,6 +73,7 @@ export default function Home() {
             onRefresh={() => {
               refetch();
               refetchActivity();
+              refetchMe();
             }}
           />
         }>
@@ -96,6 +107,16 @@ export default function Home() {
                   : theme.colors.error
               }
               size={18}
+              onPress={() => {
+                ToastAndroid.show(
+                  app?.me?.isPresent
+                    ? 'You are present today'
+                    : 'You are absent today',
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                  ToastAndroid.CENTER,
+                );
+              }}
             />
           </View>
         </View>

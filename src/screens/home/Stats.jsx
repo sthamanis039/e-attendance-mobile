@@ -107,7 +107,7 @@ export default function Stats({statsData = {}}) {
                 fontWeight: '700',
                 color: theme.colors.dark,
               }}>
-              {statsData[item.key] || 'N/A'}
+              {statsData[item.key] ?? 'N/A'}
             </Text>
           </TouchableOpacity>
         ))}

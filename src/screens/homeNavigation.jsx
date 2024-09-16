@@ -17,7 +17,7 @@ export default function HomeNavigation() {
   const app = useApp();
   const navigation = useNavigation();
 
-  const {data, isLoading, error} = useQuery({
+  const {data, isLoading, error, refetch} = useQuery({
     queryKey: ['me'],
     queryFn: getMe,
     staleTime: Infinity,
@@ -85,7 +85,12 @@ export default function HomeNavigation() {
       // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={rest => <RenderTabBar {...rest} />}
       screenOptions={{headerShown: false}}>
-      <CurvedBottomBar.Screen name="Home" position="LEFT" component={Home} />
+      <CurvedBottomBar.Screen
+        name="Home"
+        position="LEFT"
+        // eslint-disable-next-line react/no-unstable-nested-components
+        component={({...props}) => <Home refetchMe={refetch} {...props} />}
+      />
       {/* <CurvedBottomBar.Screen name="Leave" position="LEFT" component={Leaves} /> */}
       {/* <CurvedBottomBar.Screen
         name="Holiday"
