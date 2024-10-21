@@ -5,16 +5,11 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, Linking, View} from 'react-native';
 import {getStudents} from '../../api';
 import Header from '../../components/Header';
-import useApp from '../../hooks/useApp';
 
 export default function Students() {
   const {params} = useRoute();
   const navigation = useNavigation();
   const [search, setSearch] = useState('');
-
-  const app = useApp();
-
-  console.log(app?.me);
 
   const {data, fetchNextPage, isFetchingNextPage, isFetching, refetch} =
     useInfiniteQuery({
@@ -30,7 +25,7 @@ export default function Students() {
       ),
       initialPageParam: 0,
       getNextPageParam: (lastPage, allPages, lastPageParam) => {
-        if (lastPage.length === 0) {
+        if (lastPage?.length < 10) {
           return undefined;
         }
         return lastPageParam + 1;
@@ -53,8 +48,9 @@ export default function Students() {
         contentContainerStyle={{padding: 8}}
         data={data?.pages?.flat()}
         renderItem={({item}) => <StudentItem data={item} />}
+        keyExtractor={item => item?.id}
         onEndReached={fetchNextPage}
-        onEndReachedThreshold={0.9}
+        onEndReachedThreshold={0.8}
         // eslint-disable-next-line react/no-unstable-nested-components
         ListFooterComponent={() =>
           isFetching && <ActivityIndicator size="large" />

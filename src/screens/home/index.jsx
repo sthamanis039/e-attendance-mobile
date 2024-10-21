@@ -33,6 +33,7 @@ export default function Home({refetchMe}) {
       to: today,
       stats: app?.me?.isClassTeacher,
     }),
+    enabled: ['student', 'teacher', 'employee'].includes(user?.role),
   });
 
   const {
@@ -45,6 +46,7 @@ export default function Home({refetchMe}) {
       limit: 10,
       page: 1,
     }),
+    enabled: ['student', 'teacher', 'employee'].includes(user?.role),
   });
 
   const stats = useMemo(() => {
@@ -137,7 +139,9 @@ export default function Home({refetchMe}) {
             <Stats statsData={stats} />
           </View>
         </View>
-        <Activity data={activityData} isLoading={isActivityLoading} />
+        {['student', 'teacher', 'employee'].includes(user?.role) && (
+          <Activity data={activityData} isLoading={isActivityLoading} />
+        )}
       </ScrollView>
     </View>
   );

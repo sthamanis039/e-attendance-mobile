@@ -2,6 +2,7 @@ import {ThemeProvider} from '@rneui/themed';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import React, {useEffect} from 'react';
 import {I18nextProvider} from 'react-i18next';
+import {DevToolsBubble} from 'react-native-react-query-devtools';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import theme from './src/configs/theme';
 import {AppContextProvider} from './src/contexts/appContext';
@@ -44,6 +45,7 @@ export default function App() {
               <Navigations />
             </ThemeProvider>
           </I18nextProvider>
+          <DevToolsBubble />
         </QueryClientProvider>
       </AppContextProvider>
     </SafeAreaProvider>
